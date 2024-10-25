@@ -1,0 +1,30 @@
+{
+    "name": "haamed/naame-bar",
+    "description": "this package is going to handle multiple SMS panels in one package.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "lhaamed\\NaameBar\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Haamed Lazemi",
+            "email": "lhaamed.business@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "lhaamed\\NaameBar\\NaameBarServiceProvider"
+            ],
+            "aliases": {
+                "NaameBar": "lhaamed\\NaameBar\\NaameBar"
+            }
+        }
+    }
+}
