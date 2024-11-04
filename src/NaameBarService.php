@@ -89,7 +89,6 @@ class NaameBarService
     #[NoReturn] public function verify(string $phone_number, array $parameters): array
     {
 
-        dd('NaameBar::verify() is not usable yet!');
 
         $template_id = 584333;
         $data = [
