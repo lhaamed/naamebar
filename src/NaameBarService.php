@@ -12,9 +12,7 @@ use JetBrains\PhpStorm\NoReturn;
 
 class NaameBarService
 {
-
     public static string|null $active_panel = null;
-
 
     public function panel(string $panel): NaameBarService
     {
@@ -70,15 +68,34 @@ class NaameBarService
      */
     public function send(string $phone_number, string $message): array
     {
-        $line = $this->getConfig()['lines'][0];
-
+        $line = $this->getConfig()['default_line'];
         $response = $this->callAPI($this->getApiRouteMethod('normal-dispatcher'), $this->getApiRoute('normal-dispatcher') . "?username={$this->getUsername()}&password={$this->getApiKey()}&mobile={$phone_number}&line={$line}&text={$message}");
-
         if (!$response->successful()) {
             Alert::toast('رمز یکبار مصرف','خطایی رخ داده است. لطفا بعدا مجدد تلاش کنید.','error');
             throw new ConnectionException($response->json()['message']);
         }else{
             Alert::toast('رمز یکبار مصرف','با موفقیت ارسال شد.');
+            return $response->json();
+        }
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function bulkSend(array $phone_numbers, string $message)
+    {
+        $line = $this->getConfig()['default_line'];
+        $response = $this->callAPI($this->getApiRouteMethod('bulk-dispatcher'), $this->getApiRoute('bulk-dispatcher'),
+        [
+            'lineNumber' => $line,
+            'message' => $message,
+            'mobiles' => $phone_numbers
+        ]);
+        if (!$response->successful()) {
+            Alert::toast('خطا در ارسال پیامک گروهی','پیامک گروهی ارسال نشد.','error');
+            throw new ConnectionException($response->json()['message']);
+        }else{
+            Alert::toast('ارسال موفق پیامک گروهی','پیامک گروهی با موفقیت ارسال شد.');
             return $response->json();
         }
     }
