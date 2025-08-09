@@ -19,7 +19,6 @@ class NaameBarService
         if (in_array($panel,$this->getValidPanels())){
             self::$active_panel = $panel;
         }
-
         return $this;
     }
 
@@ -60,34 +59,39 @@ class NaameBarService
 
 
     /**
+     * @return array|mixed
      * @throws ConnectionException
      */
-    public function getCredit()
+    public function getCredit(): mixed
     {
         return $this->callAPI('GET', $this->getApiRoute('credit'))->json();
     }
 
 
     /**
+     * @param string $phone_number
+     * @param string $message
+     * @return array|mixed
      * @throws ConnectionException
      */
-    public function send(string $phone_number, string $message): array
+    public function send(string $phone_number, string $message): mixed
     {
         $line = $this->getConfig()['default_line'];
         $response = $this->callAPI($this->getApiRouteMethod('normal-dispatcher'), $this->getApiRoute('normal-dispatcher') . "?username={$this->getUsername()}&password={$this->getApiKey()}&mobile={$phone_number}&line={$line}&text={$message}");
         if (!$response->successful()) {
-            Alert::toast('رمز یکبار مصرف','خطایی رخ داده است. لطفا بعدا مجدد تلاش کنید.','error');
             throw new ConnectionException($response->json()['message']);
         }else{
-            Alert::toast('رمز یکبار مصرف','با موفقیت ارسال شد.');
             return $response->json();
         }
     }
 
     /**
+     * @param array $phone_numbers
+     * @param string $message
+     * @return array|mixed
      * @throws ConnectionException
      */
-    public function bulkSend(array $phone_numbers, string $message)
+    public function bulkSend(array $phone_numbers, string $message): mixed
     {
         $line = $this->getConfig()['default_line'];
         $response = $this->callAPI($this->getApiRouteMethod('bulk-dispatcher'), $this->getApiRoute('bulk-dispatcher'),
@@ -97,10 +101,24 @@ class NaameBarService
             'mobiles' => $phone_numbers
         ]);
         if (!$response->successful()) {
-            Alert::toast('خطا در ارسال پیامک گروهی','پیامک گروهی ارسال نشد.','error');
             throw new ConnectionException($response->json()['message']);
         }else{
-            Alert::toast('ارسال موفق پیامک گروهی','پیامک گروهی با موفقیت ارسال شد.');
+            return $response->json();
+        }
+    }
+
+    /**
+     * @param string $message_id
+     * @return array|mixed
+     * @throws ConnectionException
+     */
+    public function singleInquiry(string $message_id): mixed
+    {
+        $line = $this->getConfig()['default_line'];
+        $response = $this->callAPI($this->getApiRouteMethod('single-inquiry'), $this->getApiRoute('single-inquiry') . "/$message_id");
+        if (!$response->successful()) {
+            throw new ConnectionException($response->json()['message']);
+        }else{
             return $response->json();
         }
     }
@@ -110,7 +128,6 @@ class NaameBarService
      */
     #[NoReturn] public function verify(string $phone_number, array $parameters): array
     {
-
 
         $template_id = 584333;
         $data = [

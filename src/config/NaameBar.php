@@ -46,6 +46,10 @@ return [
                     'methods' => ['GET'],
                     'route' => 'https://api.sms.ir/v1/line',
                 ],
+                'single-inquiry' => [
+                    'methods' => ['GET'],
+                    'route' => 'https://api.sms.ir/v1/send',
+                ]
             ]
         ]
     ]
