@@ -88,7 +88,7 @@ class NaameBarService
         $response = $this->callAPI($this->getApiRouteMethod('bulk-dispatcher'), $this->getApiRoute('bulk-dispatcher'),
         [
             'lineNumber' => $line,
-            'message' => $message,
+            'messageText' => $message,
             'mobiles' => $phone_numbers
         ]);
         if (!$response->successful()) {
