@@ -23,6 +23,11 @@ class NaameBarService
         return $this;
     }
 
+    public function getPanel(): string|null
+    {
+        return self::$active_panel;
+    }
+
     private function getValidPanels(): array
     {
         return array_keys(config('NaameBar.panels'));
