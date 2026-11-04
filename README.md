@@ -1,6 +1,6 @@
 # NaameBar
 
-Laravel SMS integration. Currently only SMS.ir is supported. PHP 8.3 and Laravel 11 or 12 are required. Additional provider adapters and automatic failover are outside the current release.
+Laravel SMS integration. Currently only SMS.ir is supported. PHP 8.3+ and Laravel 11, 12, or 13 are required. Additional provider adapters and automatic failover are outside the current release.
 
 ## Installation
 
@@ -56,3 +56,5 @@ This extraction preserves the existing request formats and response arrays. It d
 ## Tests
 
 With the package dependencies installed, run `php tests/run.php`. Inside the host project, run `php lhaamed/NaameBar/tests/run.php`; requests are faked and no SMS is sent.
+
+For v0.1.1, all five SMS operations, provider registration, configuration loading, and facade binding were checked against Laravel 11.57.0 and the Laravel 13.40.0 framework source fetched directly from GitHub. The Laravel 13 source check reused the host's installed third-party dependencies; it was not a clean Laravel 13 dependency installation.

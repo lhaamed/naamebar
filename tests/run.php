@@ -8,8 +8,19 @@ use lhaamed\NaameBar\NaameBar;
 use lhaamed\NaameBar\NaameBarService;
 use lhaamed\NaameBar\NaameBarServiceProvider;
 
-$autoload = __DIR__.'/../vendor/autoload.php';
-require is_file($autoload) ? $autoload : __DIR__.'/../../../vendor/autoload.php';
+$autoloadPaths = [
+    __DIR__.'/../vendor/autoload.php',
+    __DIR__.'/../../../autoload.php',
+    __DIR__.'/../../../vendor/autoload.php',
+];
+foreach ($autoloadPaths as $autoload) {
+    if (is_file($autoload)) {
+        require $autoload;
+        break;
+    }
+}
+
+echo 'Laravel '.Application::VERSION.PHP_EOL;
 
 $app = new Application(sys_get_temp_dir());
 $app->instance('config', new Repository());
@@ -34,6 +45,9 @@ $app['config']->set('NaameBar.panels.sms-ir.template_id', 123);
 Http::preventStrayRequests();
 Http::fake(['*' => Http::response(['status' => 1, 'data' => []], 200)]);
 NaameBar::panel('sms-ir');
+NaameBar::send('09120000000', 'OTP test');
+NaameBar::getCredit();
+NaameBar::singleInquiry('123');
 NaameBar::bulkSend(['09120000000'], 'test');
 NaameBar::verify('09120000000', [['name' => 'OTP', 'value' => '1234']]);
 Http::assertSent(fn ($request) => str_ends_with($request->url(), '/send/bulk')
@@ -41,5 +55,11 @@ Http::assertSent(fn ($request) => str_ends_with($request->url(), '/send/bulk')
     && $request['messageText'] === 'test');
 Http::assertSent(fn ($request) => str_ends_with($request->url(), '/send/verify')
     && $request['templateId'] === 123);
-Http::assertSentCount(2);
-echo "PASS: bulk and verify requests work without application UI dependencies\n";
+Http::assertSent(fn ($request) => $request->method() === 'GET'
+    && str_ends_with($request->url(), '/credit'));
+Http::assertSent(fn ($request) => $request->method() === 'GET'
+    && str_ends_with($request->url(), '/send/123'));
+Http::assertSent(fn ($request) => $request->method() === 'POST'
+    && str_contains($request->url(), '/send?'));
+Http::assertSentCount(5);
+echo "PASS: all five SMS operations work without application UI dependencies\n";
