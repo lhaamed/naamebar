@@ -3,12 +3,10 @@
 namespace lhaamed\NaameBar;
 
 
-use App\Facades\Alert;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use JetBrains\PhpStorm\NoReturn;
 
 class NaameBarService
 {
@@ -126,10 +124,10 @@ class NaameBarService
     /**
      * @throws ConnectionException
      */
-    #[NoReturn] public function verify(string $phone_number, array $parameters): array
+    public function verify(string $phone_number, array $parameters): array
     {
 
-        $template_id = 584333;
+        $template_id = $this->getConfig()['template_id'];
         $data = [
             'templateId' => $template_id,
             'mobile' => $phone_number,
@@ -141,7 +139,6 @@ class NaameBarService
         if (!$response->successful()) {
             throw new ConnectionException($response->json()['message']);
         }else{
-            Alert::toast('رمز یکبار مصرف','با موفقیت ارسال شد.');
             return $response->json();
         }
 

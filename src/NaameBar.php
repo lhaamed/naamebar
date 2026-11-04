@@ -3,12 +3,12 @@
 
 namespace lhaamed\NaameBar;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static NaameBarService panel(string $panel)
  * @method static mixed getPanel()
+ * @method static mixed getCredit()
  * @method static mixed send(string $phone_number, string $message)
  * @method static mixed bulkSend(array $phone_numbers, string $message)
  * @method static mixed verify(string $phone_number, array $parameters)

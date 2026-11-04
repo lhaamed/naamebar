@@ -1,10 +1,18 @@
 {
     "name": "lhaamed/naame-bar",
-    "description": "this package is going to handle multiple SMS panels in one package.",
+    "description": "Laravel SMS integration with SMS.ir support.",
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": "^8.3"
+        "php": "^8.3",
+        "illuminate/http": "^11.0 || ^12.0",
+        "illuminate/support": "^11.0 || ^12.0"
+    },
+    "require-dev": {
+        "laravel/framework": "^11.0 || ^12.0"
+    },
+    "scripts": {
+        "test": "@php tests/run.php"
     },
     "autoload": {
         "psr-4": {

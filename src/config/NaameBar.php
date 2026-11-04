@@ -10,18 +10,16 @@ return [
     | NaameBar Configuration
     |--------------------------------------------------------------------------
     |
-    | there are 2 main configuration for From and List bundles. So you can determine configs individually in each.
+    | SMS.ir credentials and endpoints. Configure credentials in your application environment.
     */
 
     'panels' => [
         'sms-ir' =>[
-            'username' => 'lhaamed',
-            'api_key' => 'mrgBubWtXwGihnFjsga1Ve3vpDZVFfRj0v9XGo3Mgik86HM6dAelKNTCRf7u0hXh',
-            'lines' => [
-                '50003181890144',
-                '30007732002350'
-            ],
-            'default_line' => '50003181890144',
+            'username' => env('SMSIR_USERNAME', ''),
+            'api_key' => env('SMSIR_API_KEY', ''),
+            'lines' => [],
+            'default_line' => env('SMSIR_LINE_NUMBER', ''),
+            'template_id' => env('SMSIR_TEMPLATE_ID'),
             'api_routes' => [
                 'normal-dispatcher' => [
                     'methods' => ['POST','GET'],
